@@ -1,1 +1,0 @@
-# Planificador-autom-tico-
