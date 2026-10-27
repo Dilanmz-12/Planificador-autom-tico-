@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f5f7fb" />
+  <title>Planificador automático de tareas</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#inicio" aria-label="Inicio del planificador">
+        <span class="brand-mark">✓</span><span><strong>Planificador</strong><small>Automático de tareas</small></span>
+      </a>
+      <nav class="nav-menu" aria-label="Navegación principal">
+        <button class="nav-link active" data-view="inicio"><span>⌂</span> Inicio</button>
+        <button class="nav-link" data-view="tareas"><span>☑</span> Mis tareas</button>
+        <button class="nav-link" data-view="calendario"><span>▦</span> Calendario</button>
+        <button class="nav-link" data-view="configuracion"><span>⚙</span> Configuración</button>
+      </nav>
+      <div class="sidebar-quote"><span class="quote-icon">✦</span><p>Un buen plan es un gran logro.</p></div>
+      <div class="sidebar-foot">Organiza tu tiempo, alcanza tus metas.</div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobileMenu" aria-label="Abrir menú">☰</button>
+        <div><p class="eyebrow" id="dateGreeting">TU ESPACIO PERSONAL</p><h1 id="pageTitle">¡Hola, usuario!</h1></div>
+        <div class="user-chip"><span class="avatar">U</span><span><strong>Usuario</strong><small>Mi planificador</small></span></div>
+      </header>
+
+      <section class="view active" id="view-inicio">
+        <div class="stats-grid">
+          <article class="stat-card"><div class="stat-icon blue">▤</div><div><p>Total de tareas</p><strong id="totalCount">0</strong></div></article>
+          <article class="stat-card"><div class="stat-icon red">◷</div><div><p>Tareas urgentes</p><strong id="urgentCount">0</strong></div></article>
+          <article class="stat-card"><div class="stat-icon yellow">✧</div><div><p>Tareas pendientes</p><strong id="pendingCount">0</strong></div></article>
+          <article class="stat-card"><div class="stat-icon green">✓</div><div><p>Tareas completadas</p><strong id="completedCount">0</strong></div></article>
+        </div>
+
+        <div class="dashboard-grid">
+          <section class="panel task-panel">
+            <div class="panel-heading"><div><p class="eyebrow">MANTÉN TODO BAJO CONTROL</p><h2>Mis tareas</h2></div><button class="primary-button" id="openTaskForm">＋ Agregar tarea</button></div>
+            <div class="task-toolbar"><label class="search-box"><span>⌕</span><input id="searchInput" type="search" placeholder="Buscar tarea..." /></label><select id="filterPriority" aria-label="Filtrar por prioridad"><option value="todas">Todas las prioridades</option><option value="alta">Alta</option><option value="media">Media</option><option value="baja">Baja</option></select></div>
+            <div class="task-table-wrap"><table class="task-table"><thead><tr><th>Tarea</th><th>Prioridad</th><th>Fecha límite</th><th>Duración</th><th>Estado</th><th></th></tr></thead><tbody id="taskRows"></tbody></table><div class="empty-state" id="emptyState"><span>☑</span><strong>Aún no hay tareas</strong><p>Agrega tu primera tarea para empezar a organizarte.</p><button class="primary-button" id="emptyAddTask">＋ Crear tarea</button></div></div>
+          </section>
+
+          <section class="panel schedule-panel">
+            <div class="panel-heading"><div><p class="eyebrow">TU ORGANIZACIÓN</p><h2>Horario de hoy</h2></div><span class="today-pill" id="todayLabel">Hoy</span></div>
+            <p class="schedule-subtitle">Plan sugerido según prioridad y duración.</p>
+            <div class="schedule-list" id="scheduleList"></div>
+            <button class="secondary-button full-button" id="autoPlanButton">✦ Generar horario automático</button>
+          </section>
+        </div>
+      </section>
+
+      <section class="view" id="view-tareas">
+        <section class="panel standalone-panel"><div class="panel-heading"><div><p class="eyebrow">TODAS TUS ACTIVIDADES</p><h2>Mis tareas</h2></div><button class="primary-button" id="openTaskForm2">＋ Agregar tarea</button></div><p class="muted">Marca una tarea como completada o edítala cuando cambien tus planes.</p><div class="task-table-wrap"><table class="task-table"><thead><tr><th>Tarea</th><th>Prioridad</th><th>Fecha límite</th><th>Duración</th><th>Estado</th><th></th></tr></thead><tbody id="allTaskRows"></tbody></table></div></section>
+      </section>
+
+      <section class="view" id="view-calendario">
+        <section class="panel standalone-panel"><div class="panel-heading"><div><p class="eyebrow">PLANIFICA TU SEMANA</p><h2>Calendario</h2></div><div class="calendar-controls"><button class="icon-button" id="prevWeek" aria-label="Semana anterior">‹</button><span id="weekLabel"></span><button class="icon-button" id="nextWeek" aria-label="Semana siguiente">›</button><button class="secondary-button" id="goToday">Hoy</button></div></div><div class="calendar-grid" id="calendarGrid"></div></section>
+      </section>
+
+      <section class="view" id="view-configuracion">
+        <section class="panel settings-panel"><p class="eyebrow">PERSONALIZA TU EXPERIENCIA</p><h2>Configuración</h2><div class="setting-row"><div><strong>Horario de inicio</strong><p>Hora en la que normalmente comienzas tus actividades.</p></div><input type="time" id="startTime" value="08:00" /></div><div class="setting-row"><div><strong>Descanso entre tareas</strong><p>Minutos de pausa al organizar el horario automático.</p></div><select id="breakMinutes"><option value="0">Sin descanso</option><option value="5">5 minutos</option><option value="10" selected>10 minutos</option><option value="15">15 minutos</option></select></div><div class="setting-row"><div><strong>Restablecer datos de ejemplo</strong><p>Vuelve a cargar tareas de demostración en este navegador.</p></div><button class="secondary-button" id="resetDemo">Restablecer ejemplo</button></div><div class="setting-row danger-row"><div><strong>Eliminar todas las tareas</strong><p>Esta acción no se puede deshacer.</p></div><button class="danger-button" id="clearTasks">Eliminar tareas</button></div><p class="settings-note">Tus tareas se guardan en este navegador mediante almacenamiento local.</p></section>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="taskDialog" class="task-dialog"><form id="taskForm"><div class="dialog-heading"><div><p class="eyebrow">ORGANIZA TU TIEMPO</p><h2 id="dialogTitle">Agregar nueva tarea</h2></div><button type="button" class="close-button" id="closeDialog" aria-label="Cerrar">×</button></div><input type="hidden" id="taskId" /><label class="field-label">Nombre de la tarea<input id="taskName" type="text" maxlength="90" placeholder="Ej. Terminar trabajo de inglés" required /></label><label class="field-label">Descripción (opcional)<textarea id="taskDescription" rows="3" placeholder="Agrega detalles o recordatorios..."></textarea></label><div class="form-row"><label class="field-label">Prioridad<select id="taskPriority"><option value="alta">Alta</option><option value="media" selected>Media</option><option value="baja">Baja</option></select></label><label class="field-label">Fecha límite<input id="taskDue" type="datetime-local" required /></label></div><label class="field-label">Duración estimada<select id="taskDuration"><option value="0.5">30 minutos</option><option value="1">1 hora</option><option value="1.5" selected>1 hora y 30 minutos</option><option value="2">2 horas</option><option value="2.5">2 horas y 30 minutos</option><option value="3">3 horas</option><option value="4">4 horas</option></select></label><div class="dialog-actions"><button type="button" class="secondary-button" id="cancelDialog">Cancelar</button><button type="submit" class="primary-button">Guardar tarea</button></div></form></dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
